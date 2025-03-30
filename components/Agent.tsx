@@ -1,34 +1,45 @@
-import React from 'react'
-import Image from 'next/image'
+"use client";
+
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 enum CallStatus {
-  INACTIVE = "INACTIVE",
-  CONNECTING = "CONNECTING",
-  ACTIVE = "ACTIVE",
-  FINISHED = "FINISHED",
-}
-
+    INACTIVE = "INACTIVE",
+    CONNECTING = "CONNECTING",
+    ACTIVE = "ACTIVE",
+    FINISHED = "FINISHED",
+  }
 
 const Agent = ({userName}: AgentProps) => {
-  const isSpeaking = true;
+    const isSpeaking = true;
+    const callStatus = CallStatus.FINISHED;
+    const messages = [
+        'Whats your name?',
+        'My name is Paulo, good to see you!'
+    ];
+    const lastMessage = messages [messages.length-1];
 
   return (
-   <>
-   <div className="call-view">
-   <div className="card-interviewer">
-   <div className="avatar">
-            <Image
-              src="/ai-avatar.png"
-              alt="profile-image"
-              width={65}
-              height={54}
-              className="object-cover"
-            />
-            {isSpeaking && <span className="animate-speak" />}
-          </div>
-          <h3>AI Interviewer</h3>
-    </div>
-    <div className="card-border">
+    <>
+    <div className="call-view">
+      {/* AI Interviewer Card */}
+      <div className="card-interviewer">
+        <div className="avatar">
+          <Image
+            src="/ai-avatar.png"
+            alt="profile-image"
+            width={65}
+            height={54}
+            className="object-cover"
+          />
+          {isSpeaking && <span className="animate-speak" />}
+        </div>
+        <h3>AI Interviewer</h3>
+      </div>
+      {/* User Profile Card */}
+      <div className="card-border">
           <div className="card-content">
             <Image
               src="/user-avatar.png"
@@ -38,11 +49,11 @@ const Agent = ({userName}: AgentProps) => {
               className="rounded-full object-cover size-[120px]"
             />
             <h3>{userName}</h3>
+            </div>
           </div>
         </div>
-   </div>
 
-   {messages.length > 0 && (
+        {messages.length > 0 && (
         <div className="transcript-border">
           <div className="transcript">
             <p
@@ -57,31 +68,29 @@ const Agent = ({userName}: AgentProps) => {
           </div>
         </div>
       )}
-      
-   
-   <div className="w-full flex justify-center">
+
+        <div className="w-full flex justify-center">
         {callStatus !== "ACTIVE" ? (
-          <button className="relative btn-call" onClick={() => handleCall()}>
-            <span
+            <button className="relative btn-call">
+                <span
               className={cn(
                 "absolute animate-ping rounded-full opacity-75",
                 callStatus !== "CONNECTING" && "hidden"
               )}
             />
-
             <span className="relative">
               {callStatus === "INACTIVE" || callStatus === "FINISHED"
                 ? "Call"
                 : ". . ."}
             </span>
-          </button>
+            </button>
         ) : (
-          <button className="btn-disconnect" onClick={() => handleDisconnect()}>
-            End
-          </button>
+             <button className="btn-disconnect">
+                End
+             </button>
         )}
-      </div>
-   </>
+</div>
+</>
   )
 }
 
